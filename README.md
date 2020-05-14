@@ -236,11 +236,11 @@ La siguiente tabla ilustra muestra, según la operación aplicada, que resultado
 
 ### OPERADOR AND (&&):
 
-![](readme-resources/and-true-table.png)
+![](/readme-resources/and-true-table.png)
 
 ### OPERADOR OR (||):
 
-![](readme-resources/or-true-table.png)
+![](/readme-resources/or-true-table.png)
 
 ## Condicionales
 
