@@ -236,22 +236,11 @@ La siguiente tabla ilustra muestra, según la operación aplicada, que resultado
 
 ### OPERADOR AND (&&):
 
-| Condición 1   | Condición 2   | Resultado		|
-|:-------------:|:-------------:|:----------:	|
-|TRUE			|TRUE			|TRUE			|
-|FALSE			|TRUE 			|FALSE			|
-|TRUE			|FALSE			|FALSE			|
-|FALSE			|FALSE			|FALSE			|
-	
+![](readme-resources/and-true-table.png)
 
 ### OPERADOR OR (||):
 
-| Condición 1   | Condición 2   | Resultado		|
-|:-------------:|:-------------:|:----------:	|
-|TRUE			|TRUE			|TRUE			|
-|FALSE			|TRUE 			|TRUE			|
-|TRUE			|FALSE			|TRUE			|
-|FALSE			|FALSE			|FALSE			|
+![](readme-resources/or-true-table.png)
 
 ## Condicionales
 
