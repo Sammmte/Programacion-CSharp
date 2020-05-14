@@ -236,11 +236,11 @@ La siguiente tabla ilustra muestra, según la operación aplicada, que resultado
 
 ### OPERADOR AND (&&):
 
-![](/readme-resources/and-true-table.png)
+![](https://github.com/Sammmte/Programacion-CSharp/blob/master/readme-resources/and-true-table.PNG)
 
 ### OPERADOR OR (||):
 
-![](/readme-resources/or-true-table.png)
+![](https://github.com/Sammmte/Programacion-CSharp/blob/master/readme-resources/or-true-table.PNG)
 
 ## Condicionales
 
