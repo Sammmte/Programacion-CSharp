@@ -686,3 +686,148 @@ public static void Main()
 	int lengthDeLaTerceraDimension = miMatriz.GetLength(2);
 }
 ```
+
+## Clases y Objetos
+
+### Clases
+
+Una clase es una definición de un objeto. Básicamente nosotros podemos crear nuestros propios tipos de dato y luego utilizarlos para nuestros fines.
+
+```csharp
+//Asi declaramos una clase Perro. 
+//Es decir, estamos creando una definición de lo que es un perro en nuestro programa
+public class Perro
+{
+	//Las clases pueden tener variables
+	public string nombre;
+	//O constantes, tambien
+	public const int cantidadDePatas = 4;
+
+	//Tambien muy seguramente tenga funciones o metodos. 
+	//Comunmente en el contexto de una clase a una funcion se le llama metodo
+	public void Ladrar()
+	{
+		Console.WriteLine("Guau!");
+	}
+}
+```
+
+Las clases representan el molde de un objeto. Perse, las clases no hacen nada, es necesario instanciarlas. Para ello utilizamos la palabra reservada **new** seguida del **constructor** de la clase, que lo que hará es crear un objeto a partir de una definición, que es la clase.
+
+```csharp
+public class Program
+{
+	public static void Main(string[] args)
+	{
+		//Creo mi objeto perro en funcion de su clase
+		Perro miPerro = new Perro(); //Mas adelante hablaremos de constructores
+	}
+}
+
+public class Perro
+{
+	public string nombre;
+	public const int cantidadDePatas = 4;
+
+	public void Ladrar()
+	{
+		Console.WriteLine("Guau!");
+	}
+}
+```
+
+### Objetos
+
+Los objetos son instancias de una clase. Esto quiere decir que son un elemento útil creado en función de una definición (la clase). Para que nosotros podamos ejecutar comportamiento definido en una clase, guardar información o leerla de ella, debemos crear un objeto. Este puede tener valores diferentes a otros objetos de la misma clase, pero nunca una estructura diferente. Por ejemplo, nuestra clase "Perro" tiene un nombre, osea que todos los perros de nuestro programa tendrán un nombre. Cuando creamos un objeto nosotros podemos ponerle el nombre que queramos. Hay que pensarlo como si estuvieramos hablando de objetos en la vida real, si creamos 2 objetos de la clase "Perro" **¡Estamos creando 2 perros!** Y si bien nosotros definimos que todos los perros tienen nombre, **esto no significa que los perros que creemos deban llamarse igual. Para acceder a las variables y métodos de un objeto se utiliza el operador "." (dot)**
+
+```csharp
+public class Program
+{
+	public static void Main(string[] args)
+	{
+		//Creo 2 objetos. Estos comparten clase y por lo tanto tendran las mismas caracteristicas, pero no necesariamente los mismos valores.
+		Perro miPrimerPerro = new Perro();
+		Perro miSegundoPerro = new Perro();
+
+		miPrimerPerro.nombre = "Fido"; //Mi primer perro se llama Fido
+		miSegundoPerro.nombre = "Firulais"; //Pero mi segundo perro se llama Firulais
+
+		Console.WriteLine(miPrimerPerro.nombre);
+		Console.WriteLine(miSegundoPerro.nombre);
+	}
+}
+
+public class Perro
+{
+	public string nombre;
+	public const int cantidadDePatas = 4;
+
+	public void Ladrar()
+	{
+		Console.WriteLine("Guau!");
+	}
+}
+```
+
+En nuestro ejemplo anterior, todos los perros que creemos tendrán nombre, pero este puede ser diferente entre ellos. Por otro lado esta la constante **cantidadDePatas** que es igual a 4. Al ser constante no puede cambiarse, por lo que los perros que creemos indefectiblemente tendrán 4 patas. Esta decisión en nuestro diseño no nos deja, por ejemplo, crear perros cojos. ¿Es esto malo? Depende de vos. Vos sos quien define como se compone un perro en tu programa ¡Podés hacer lo que quieras!
+
+En lo que respecta a métodos, los perros anteriormente creados comparten por definición el método **"Ladrar"**. Los métodos representan acciones que un objeto puede ejecutar. Esto significa que todos nuestros perros por definición pueden ladrar.
+
+```csharp
+public class Program
+{
+	public static void Main(string[] args)
+	{
+		Perro miPrimerPerro = new Perro();
+		Perro miSegundoPerro = new Perro();
+
+		miPrimerPerro.nombre = "Fido";
+		miSegundoPerro.nombre = "Firulais";
+
+		miPrimerPerro.Ladrar(); //La consola mostrara "Guau!" en ambos casos
+		miSegundoPerro.Ladrar();
+	}
+}
+
+public class Perro
+{
+	public string nombre;
+	public const int cantidadDePatas = 4;
+
+	public void Ladrar()
+	{
+		Console.WriteLine("Guau!");
+	}
+}
+```
+
+### Constructores
+
+Los constructores son métodos especiales que poseen todas las clases, implícita o explícitamente. **Esto significa que no es necesario definir a mano un constructor, ya que si no se hace la clase tendrá uno por defecto.** A diferencia de los métodos comunes que vimos hasta ahora, los constructores se definen colocándole un modificador de acceso **(ej. public, private)** y el nombre de la clase, luego los paréntesis con parámetros si necesitara. Los constructores sirven para comunicar los datos necesarios para construir un objeto determinado. Por ejemplo, podríamos definir que nuestros perros **necesitan** un nombre para ser creados. Si nosotros no definimos un constructor siempre tendrá uno vacío por defecto. Si en cambio definimos uno, se convertirá en obligatorio.
+
+```csharp
+public class Program
+{
+	public static void Main(string[] args)
+	{
+		Perro miPrimerPerro = new Perro("Fido"); //paso parametros distintos para asi tener 2 perros con distinto nombre
+		Perro miSegundoPerro = new Perro("Firulais");
+	}
+}
+
+public class Perro
+{
+	public string nombre;
+	public const int cantidadDePatas = 4;
+
+	public Perro(string nombreDelPerro)
+	{
+		nombre = nombreDelPerro; //asigno el parametro pasado por el constructor a la variable del objeto
+	}
+
+	public void Ladrar()
+	{
+		Console.WriteLine("Guau!");
+	}
+}
+```
