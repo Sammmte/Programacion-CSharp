@@ -1175,16 +1175,14 @@ private string miVariablePrivada = "Soy privada!";
 
 Los modificadores de acceso posibles son:
 
-```csharp
-public -> accesible desde cualquier clase.
-private -> accesible únicamente desde la clase que lo declara.
-protected -> accesible desde la clase que la declara y cualquier clase que herede de ella.
-internal -> accesible como si fuera pública desde el mismo assembly, 
+- **public** -> accesible desde cualquier clase.
+- **private** -> accesible únicamente desde la clase que lo declara.
+- **protected** -> accesible desde la clase que la declara y cualquier clase que herede de ella.
+- **internal** -> accesible como si fuera pública desde el mismo assembly, 
 pero privada para otros assemeblies.
-protected internal -> accesible desde la clase que la declara y sus derivadas 
+- **protected internal** -> accesible desde la clase que la declara y sus derivadas 
 dentro del mismo assembly, pero privada para clases que hereden de la clase 
 que la declara y se encuentren en otro assembly.
-private protected -> cuando un elemento tiene este modificador, las clases que hereden de 
+- **private protected** -> cuando un elemento tiene este modificador, las clases que hereden de 
 la que lo declara heredarán este elemento y podrán acceder a el, pero no al mismo 
 elemento perteneciente a otro objeto.
-```
