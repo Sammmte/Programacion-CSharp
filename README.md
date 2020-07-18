@@ -302,6 +302,110 @@ public static void Main()
 }
 ```
 
+```csharp
+public static void Main()
+{
+	//Esto es válido, porque es una expresión bool
+	//Este if siempre entrará, porque siempre es true
+	//Por supuesto, hacer esto en un proyecto real no tiene sentido
+	if(true)
+	{
+		Console.WriteLine("Que bueno que siempre vean esto");
+	}
+
+	//Esto también es válido, este if jamás entrará
+	//Nuevamente, en un proyecto real no tiene sentido
+	if(false)
+	{
+		Console.WriteLine("Que lastima que jamas vean esto");
+	}
+}
+```
+
+### Contextos y anidamiento
+
+Las variables "viven" en contextos definidos. Los contextos se definen mediante las llaves ({}).
+El **if**, así como el **switch, while, do while, for** que veremos más adelante, crean contextos.
+
+Los contextos pueden anidarse dentro de otros contextos. 
+Esto significa que puedo hacer un if dentro de otro, y luego otro dentro, y otro y otro.
+Cuantos quiera, de hecho.
+
+```csharp
+public static void Main()
+{
+	if(true)
+	{
+		Console.WriteLine("Aca entro");
+		
+		if(true)
+		{
+			Console.WriteLine("Aca tambien");
+
+			if(true)
+			{
+				Console.WriteLine("Y aca");
+			}
+		}
+	}
+}
+```
+
+### Scope (o contexto de vida) de las variables
+
+Cuando el contexto de una variable es destruido, la variable también se destruye.
+Una variable creada en un contexto puede ser accedida desde cualquier lugar del contexto o desde un subcontexto.
+Veamos un ejemplo. **Una función es un contexto**. Dentro de una función se puede crear un **if, que también es un contexto**.
+En este caso el contexto del if es un subcontexto del de la función.
+
+```csharp
+public static void Main()
+{
+	int unaVariable = 3;
+
+	if(true)
+	{
+		//Puedo usar "unaVariable" porque pertenece a un contexto "padre"
+		unaVariable = 5;
+	}
+}
+```
+
+Como dijimos, podemos usar variables en subcontextos del contexto en que fue creada, pero no podemos usarla en contextos superiores.
+Si las cosas fueran al revés en el ejemplo anterior y la variable fuera declarada dentro del if **no podríamos usarla fuera de su contexto.**
+
+```csharp
+public static void Main()
+{
+	if(true)
+	{
+		int unaVariable = 5;
+	}
+
+	//Esto da error. Cuando se sale del if, es decir
+	//el contexto del if es destruido, "unaVariable" también se destruye.
+	unaVariable = 8;
+}
+```
+
+```csharp
+public static void Main()
+{
+	if(true)
+	{
+		int unaVariable = 5;
+
+		if(true)
+		{
+			//Esto si es válido, ya que este segundo if es
+			//un subcontexto del primer if
+			//que fue donde se declaró "unaVariable"
+			unaVariable = 8;
+		}
+	}
+}
+```
+
 ### Bloque SWITCH
 
 El bloque **switch** evalúa si la expresión dada (la variable) es igual a alguno de los casos expuestos en el bloque. Los deben ser valores **constantes**. Para determinar un caso se utiliza la palabra reservada **case**. Si ninguno de los casos cumple se puede utilizar un caso por defecto, con la palabra reservada **default**. Al final de cada caso se debe cerrar con la palabra reservada **break**.
@@ -687,11 +791,9 @@ public static void Main()
 }
 ```
 
-## Clases y Objetos
+## Clases y Structs
 
-### Clases
-
-Una clase es una definición de un objeto. Básicamente nosotros podemos crear nuestros propios tipos de dato y luego utilizarlos para nuestros fines.
+Las clases y structs son definiciones de un objeto. Básicamente nosotros podemos crear nuestros propios tipos de dato y luego utilizarlos para nuestros fines.
 
 ```csharp
 //Asi declaramos una clase Perro. 
@@ -703,6 +805,12 @@ public class Perro
 	//O constantes, tambien
 	public const int cantidadDePatas = 4;
 
+	//Esto es un constructor. Mas adelante hablaremos de ellos
+	public Perro(string _nombre)
+	{
+		nombre = _nombre;
+	}
+
 	//Tambien muy seguramente tenga funciones o metodos. 
 	//Comunmente en el contexto de una clase a una funcion se le llama metodo
 	public void Ladrar()
@@ -710,9 +818,29 @@ public class Perro
 		Console.WriteLine("Guau!");
 	}
 }
+
+//De la misma podemos crear un struct Posicion2D
+public struct Posicion2D
+{
+	public int x;
+	public int y;
+
+	//Los structs también pueden tener constructores
+	public Position2D(int _x, int _y)
+	{
+		x = _x;
+		y = _y;
+	}
+	
+	//Y por supuesto también métodos. Este es un ejemplo
+	public Position2D SumarPosicion(Position2D otraPosicion)
+	{
+		return new Position2D(otraPosicion.x + x, otraPosicion.y + y);
+	}
+}
 ```
 
-Las clases representan el molde de un objeto. Perse, las clases no hacen nada, es necesario instanciarlas. Para ello utilizamos la palabra reservada **new** seguida del **constructor** de la clase, que lo que hará es crear un objeto a partir de una definición, que es la clase.
+Las clases y los structs representan el molde de un objeto. Perse, no hacen nada, es necesario instanciarlos. Para ello utilizamos la palabra reservada **new** seguida del **constructor** de la clase o el struct, que lo que hará es crear un objeto a partir de su propia definición.
 
 ```csharp
 public class Program
@@ -721,6 +849,8 @@ public class Program
 	{
 		//Creo mi objeto perro en funcion de su clase
 		Perro miPerro = new Perro(); //Mas adelante hablaremos de constructores
+
+		miPerro.Ladrar(); //ahora que tengo un objeto puedo llamar a su funcion Ladrar. Yupi!
 	}
 }
 
@@ -738,7 +868,15 @@ public class Perro
 
 ### Objetos
 
-Los objetos son instancias de una clase. Esto quiere decir que son un elemento útil creado en función de una definición (la clase). Para que nosotros podamos ejecutar comportamiento definido en una clase, guardar información o leerla de ella, debemos crear un objeto. Este puede tener valores diferentes a otros objetos de la misma clase, pero nunca una estructura diferente. Por ejemplo, nuestra clase "Perro" tiene un nombre, osea que todos los perros de nuestro programa tendrán un nombre. Cuando creamos un objeto nosotros podemos ponerle el nombre que queramos. Hay que pensarlo como si estuvieramos hablando de objetos en la vida real, si creamos 2 objetos de la clase "Perro" **¡Estamos creando 2 perros!** Y si bien nosotros definimos que todos los perros tienen nombre, **esto no significa que los perros que creemos deban llamarse igual. Para acceder a las variables y métodos de un objeto se utiliza el operador "." (dot)**
+Los objetos son instancias de una clase o un struct. 
+Esto quiere decir que son un elemento útil creado en función de una definición (la clase o el struct). 
+Para que nosotros podamos ejecutar comportamiento definido en una clase o struct, guardar información o leerla, debemos crear un objeto.
+ Este puede tener valores diferentes a otros objetos de la misma clase o struct, pero nunca una estructura diferente. 
+Por ejemplo, nuestra clase "Perro" tiene un nombre, osea que todos los perros de nuestro programa tendrán un nombre. 
+Cuando creamos un objeto nosotros podemos ponerle el nombre que queramos. 
+Hay que pensarlo como si estuvieramos hablando de objetos en la vida real, si creamos 2 objetos de la clase "Perro" **¡Estamos creando 2 perros!**. 
+Y si bien nosotros definimos que todos los perros tienen nombre, **esto no significa que los perros que creemos deban llamarse igual.
+Para acceder a las variables y métodos de un objeto se utiliza el operador "." (dot)**
 
 ```csharp
 public class Program
@@ -803,7 +941,13 @@ public class Perro
 
 ### Constructores
 
-Los constructores son métodos especiales que poseen todas las clases, implícita o explícitamente. **Esto significa que no es necesario definir a mano un constructor, ya que si no se hace la clase tendrá uno por defecto.** A diferencia de los métodos comunes que vimos hasta ahora, los constructores se definen colocándole un modificador de acceso **(ej. public, private)** y el nombre de la clase, luego los paréntesis con parámetros si necesitara. Los constructores sirven para comunicar los datos necesarios para construir un objeto determinado. Por ejemplo, podríamos definir que nuestros perros **necesitan** un nombre para ser creados. Si nosotros no definimos un constructor siempre tendrá uno vacío por defecto. Si en cambio definimos uno, se convertirá en obligatorio.
+Los constructores son métodos especiales que poseen todas las clases y structs, implícita o explícitamente. 
+**Esto significa que no es necesario definir a mano un constructor, ya que si no se hace siempre habrá uno por defecto.** 
+A diferencia de los métodos comunes que vimos hasta ahora, los constructores se definen colocándole un modificador de acceso **(ej. public, private)** y el nombre de la clase, luego los paréntesis con parámetros si necesitara. 
+Los constructores sirven para comunicar los datos necesarios para construir un objeto determinado. 
+Por ejemplo, podríamos definir que nuestros perros **necesitan** un nombre para ser creados.
+**Si nosotros no definimos un constructor siempre tendrá uno vacío por defecto.
+Si en cambio definimos uno, se convertirá en obligatorio.**
 
 ```csharp
 public class Program
@@ -830,4 +974,217 @@ public class Perro
 		Console.WriteLine("Guau!");
 	}
 }
+```
+
+### Diferencias entre clases y structs
+
+### Clases como tipos de referencia
+
+Las clases son denominadas **"Reference Types"** o **"Tipos de Referencia"**. Esto significa que las clases se manejan **por referencia**.
+Las variables de clases **guardan una referencia a un objeto. No guardan el objeto en sí. O sea, las variables guardan la información de donde se encuentra ese objeto en la memoria.**
+Cuando utilizamos la palabra **new** seguida del constructor de la clase estamos creando un objeto en la memoria.
+La variable involucrada, llamemosla **miReferencia**, guardará la dirección a donde se encuentra el objeto.
+Si nosotros luego asignamos a otra variable lo que **miReferencia** contiene, esta nueva variable también tendrá la dirección en memoria en donde se encuentra el objeto.
+**Pero el objeto siempre es el mismo. No se crean más objetos en el proceso, sino que se crean referencias a un sólo objeto.**
+
+**Cuando utilizamos el operador "." en una variable de clase, nos estamos refiriendo al objeto al que apuntan.**
+
+```csharp
+public class Program
+{
+	public static void Main(string[] args)
+	{
+		//Creo un objeto de perro, al usar la palabra "new"
+		Perro miReferenciaAUnPerro = new Perro();
+
+		//Al hacer esto las 2 variables pasan a "apuntar" al mismo objeto
+		//Esto significa que podemos usar cualquiera de las 2 referencias para llamar
+		//a métodos o variables de un mismo objeto
+		Perro miOtraReferenciaAlMismoPerro = miReferenciaAUnPerro;
+
+		//Cambio el nombre de mi perro con una de las referencias
+		miReferenciaAUnPerro.nombre = "Firulais";
+
+		//Y puedo leerlo con cualquiera de ellas. No importa que referencia use aquí
+		//En la consola siempre se mostrará "Firulais"
+		Console.WriteLine(miOtraReferenciaAlMismoPerro.nombre);
+	}
+}
+
+public class Perro
+{
+	public string nombre;
+	public const int cantidadDePatas = 4;
+
+	public void Ladrar()
+	{
+		Console.WriteLine("Guau!");
+	}
+}
+```
+
+Esto es muy importante tenerlo en cuenta a la hora de pasar objetos a través de funciones como parámetros o devolviéndolos como resultado, con un return.
+
+```csharp
+public class Program
+{
+	public static void Main(string[] args)
+	{
+		Perro miReferenciaAUnPerro = new Perro();
+
+		miReferenciaAUnPerro.nombre = "Firulais";
+
+		CambiarNombreAlPerro(miReferenciaAUnPerro);
+
+		//Aquí será "Hercules" el resultado, porque el objeto fue
+		//cambiado dentro del a función, a través de otra referencia
+		Console.WriteLine(miReferenciaAUnPerro.nombre);
+	}
+
+	static void CambiarNombreAlPerro(Perro unPerro)
+	{
+		//A pesar de que "unPerro" no es la misma variable que "miReferenciaAUnPerro"
+		//estas apuntan al mismo objeto, así que puedo cambiar sus propiedades
+		//desde cualquiera de ellas
+		unPerro.nombre = "Hercules";
+	}
+}
+
+public class Perro
+{
+	public string nombre;
+	public const int cantidadDePatas = 4;
+
+	public void Ladrar()
+	{
+		Console.WriteLine("Guau!");
+	}
+}
+```
+
+### Structs como tipos de valor
+
+Los structs, por el contrario que las clases, son **"Value Types"** o **"Tipos de Valor"**. Esto significa que los structs se manejan **por valor**.
+Las variables de structs **guardan el objeto en ellas, no una referencia**. Cuando asigno una variable de un struct a otra del mismo tipo **se crea un nuevo objeto del struct, una copia, y se asigna a la nueva variable.**
+
+Veamos los mismos ejemplos para "Perro", pero ahora como un struct.
+
+```csharp
+public class Program
+{
+	public static void Main(string[] args)
+	{
+		//Creo un objeto de perro, al usar la palabra "new"
+		Perro miPerro = new Perro();
+
+		//Le cambio el nombre a mi perro
+		miPerro.nombre = "Firulais";
+
+		//Cuando asigno lo que hay en la primera variable a la segunda
+		//el contenido se copia y se crea un nuevo objeto del struct
+		//Esto significa que este segundo perro viene con el nombre "Firulais" también
+		Perro miOtroPerro = miPerro;
+
+		//Al cambiar el nombre del objeto de mi segunda variable de perro
+		//cambio unicamente al perro que contiene "miOtroPerro"
+		miOtroPerro.nombre = "Hercules";
+
+		//Ahora "miOtroPerro" se llama Hercules
+		//y "miPerro" se sigue llamando Firulais
+		Console.WriteLine(miPerro.nombre);
+		Console.WriteLine(miOtroPerro.nombre);
+	}
+}
+
+public struct Perro
+{
+	public string nombre;
+	public const int cantidadDePatas = 4;
+
+	public void Ladrar()
+	{
+		Console.WriteLine("Guau!");
+	}
+}
+```
+
+```csharp
+public class Program
+{
+	public static void Main(string[] args)
+	{
+		Perro miPerro = new Perro();
+
+		miPerro.nombre = "Firulais";
+
+		//Al pasar un struct por una funcion, este tambien se copia
+		//Por lo tanto, lo que reciba "CambiarNombreAlPerro" sera similar
+		//pero no sera el mismo objeto que hay dentro de "unPerro"
+		CambiarNombreAlPerro(miPerro);
+		
+		//"miPerro" se sigue llamando "Firulais"
+		//su valor no cambio
+		Console.WriteLine(miPerro.nombre);
+	}
+
+	static void CambiarNombreAlPerro(Perro unPerro)
+	{
+		//Aunque el metodo diga que cambia el nombre del perro, esto no es cierto
+		//porque "unPerro" es nuevo objeto de tipo Perro
+		//Cuando se destruya el contexto de esta funcion
+		//el objeto que tiene "unPerro" también lo hara
+		unPerro.nombre = "Hercules";
+	}
+}
+
+public struct Perro
+{
+	public string nombre;
+	public const int cantidadDePatas = 4;
+
+	public void Ladrar()
+	{
+		Console.WriteLine("Guau!");
+	}
+}
+```
+
+
+
+## Pilares de la Programación Orientada a Objetos
+
+### Encapsulamiento
+
+El encapsulamiento es la capacidad y práctica de ocultar la implementación de un objeto y obligar a que la utilización de este se realice mediante sus métodos públicos.
+
+#### Modificadores de Acceso
+
+Los modificadores de acceso determinan que clases pueden observar y utilizar los elementos de otras. Las variables y funciones que pertenecen a una clase tienen implícitamente modificadores de acceso.
+Por defecto, si no le coloca un modificador de acceso será **private**.
+
+#### Ejemplo:
+
+```csharp
+public void UnaFuncionPublica()
+{
+	Console.WriteLine("Soy publica!");
+}
+
+private string miVariablePrivada = "Soy privada!";
+```
+
+Los modificadores de acceso posibles son:
+
+```csharp
+public -> accesible desde cualquier clase.
+private -> accesible únicamente desde la clase que lo declara.
+protected -> accesible desde la clase que la declara y cualquier clase que herede de ella.
+internal -> accesible como si fuera pública desde el mismo assembly, 
+pero privada para otros assemeblies.
+protected internal -> accesible desde la clase que la declara y sus derivadas 
+dentro del mismo assembly, pero privada para clases que hereden de la clase 
+que la declara y se encuentren en otro assembly.
+private protected -> cuando un elemento tiene este modificador, las clases que hereden de 
+la que lo declara heredarán este elemento y podrán acceder a el, pero no al mismo 
+elemento perteneciente a otro objeto.
 ```
